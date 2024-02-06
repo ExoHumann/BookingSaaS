@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const serviceSchema = new mongoose.Schema({
+    category: {
+        typeof: 'string',
+        required: true,
+    },
     name: {
         type: String,
         required: true,

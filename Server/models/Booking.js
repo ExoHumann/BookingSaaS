@@ -23,12 +23,7 @@ const bookingSchema = new mongoose.Schema({
         enum: ['public', 'private'],
         default: 'private',
     },
-    service: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Service',
-        required: true,
-    },
-
+ 
     // Add additional booking fields as necessary
 });
 
