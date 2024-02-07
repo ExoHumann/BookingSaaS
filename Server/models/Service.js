@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const serviceSchema = new mongoose.Schema({
+const serviceSchema = new Schema({
     category: {
         typeof: 'string',
         required: true,
@@ -21,6 +21,6 @@ const serviceSchema = new mongoose.Schema({
     // Add other fields as necessary, such as category, if you want to group services
 });
 
-const Service = mongoose.model('Service', serviceSchema);
+const Service = model('Service', serviceSchema);
 
-module.exports = Service;
+export default Service;

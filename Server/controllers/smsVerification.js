@@ -1,7 +1,7 @@
 // Example SMS verification controller and middleware
 
 // Controller function to send SMS verification code
-exports.sendVerificationCode = async (req, res) => {
+export async function sendVerificationCode(req, res) {
     const { phoneNumber } = req.body;
     try {
         // Generate a random verification code
@@ -14,10 +14,10 @@ exports.sendVerificationCode = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: 'Failed to send verification code', message: error.message });
     }
-};
+}
 
 // Middleware to check if the phone number is verified
-exports.checkPhoneNumberVerification = (req, res, next) => {
+export function checkPhoneNumberVerification(req, res, next) {
     const { user } = req; // Assuming you have user data in req.user
     
     // Check if the user's phone number is verified in your database
@@ -26,7 +26,7 @@ exports.checkPhoneNumberVerification = (req, res, next) => {
     } else {
         res.status(403).json({ error: 'Phone number not verified', message: 'Please verify your phone number' });
     }
-};
+}
 
 // Route for users to submit the verification code
 router.post('/verify', (req, res) => {

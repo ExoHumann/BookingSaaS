@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+import { connect } from 'mongoose';
 
 const connectDB = async () => {
     const dbURI = process.env.MONGO_URI || 'mongodb://localhost:27017/yourDefaultDatabase'; // Default to a development URI
 
     try {
-        await mongoose.connect(dbURI, {
+        await connect(dbURI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useCreateIndex: true,
@@ -17,4 +17,4 @@ const connectDB = async () => {
     }
 };
 
-module.exports = connectDB;
+export default connectDB;

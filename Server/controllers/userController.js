@@ -1,13 +1,13 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Import the User model
+import { hash, compare } from 'bcrypt';
+import { sign } from 'jsonwebtoken';
+import { create, findOne } from '../models/User'; // Import the User model
 
 // Register a new user
-exports.registerUser = async (req, res) => {
+export async function registerUser(req, res) {
   const { email, password } = req.body;
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({
+    const hashedPassword = await hash(password, 10);
+    const newUser = await create({
       email,
       password: hashedPassword,
     });
@@ -15,22 +15,22 @@ exports.registerUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Error registering new user', message: error.message });
   }
-};
+}
 
 // Login an existing user
-exports.loginUser = async (req, res) => {
+export async function loginUser(req, res) {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await findOne({ email });
 
     if (!user) {
       return res.status(401).json({ error: 'Authentication failed', message: 'Invalid email or password' });
     }
 
-    const match = await bcrypt.compare(password, user.password);
+    const match = await compare(password, user.password);
 
     if (match) {
-      const jwtToken = jwt.sign(
+      const jwtToken = sign(
         { userId: user._id, role: user.role },
         process.env.JWT_SECRET, // Replace with your actual JWT secret
         { expiresIn: '1h' }
@@ -42,4 +42,4 @@ exports.loginUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Error logging in', message: error.message });
   }
-};
+}

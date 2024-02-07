@@ -1,24 +1,24 @@
-const Verification = require('../models/Verification');
-const { sendVerificationSMS } = require('../utils/smsUtil');
+import { create, findOne } from '../models/Verification';
+import { sendVerificationSMS } from '../utils/smsUtil';
 
-exports.sendCode = async (req, res) => {
+export async function sendCode(req, res) {
   const { phoneNumber } = req.body;
   const code = Math.floor(100000 + Math.random() * 900000); // 6-digit code
   const expiresAt = new Date(new Date().getTime() + 30*60000); // Code expires in 30 mins
 
   try {
-    await Verification.create({ phoneNumber, code, expiresAt });
+    await create({ phoneNumber, code, expiresAt });
     await sendVerificationSMS(phoneNumber, code);
     res.json({ message: "Verification code sent." });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+}
 
-exports.verifyCode = async (req, res) => {
+export async function verifyCode(req, res) {
   const { phoneNumber, code } = req.body;
   try {
-    const verification = await Verification.findOne({ phoneNumber, code });
+    const verification = await findOne({ phoneNumber, code });
     if (!verification || verification.expiresAt < new Date()) {
       return res.status(400).json({ message: "Invalid or expired code." });
     }
@@ -28,4 +28,4 @@ exports.verifyCode = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+}
